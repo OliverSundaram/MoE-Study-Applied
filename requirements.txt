@@ -1,0 +1,8 @@
+torch==2.11.0+cu128
+transformers==5.16.1
+tqdm==4.70.0
+lm_eval==0.4.13
+matplotlib==3.11.1
+numpy==2.5.1
+sympy==1.14.0
+datasets==5.0.1

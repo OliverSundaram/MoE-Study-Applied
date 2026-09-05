@@ -1,0 +1,13 @@
+.venv
+.idea
+runs
+preparation/data
+
+*.safetensors
+*.pt
+*.bin
+.venv/
+data/
+model
+
+__pycache__/

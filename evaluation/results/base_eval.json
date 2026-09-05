@@ -1,0 +1,81 @@
+{
+    "model": "base",
+    "model_dir": "D:\\Projects\\Python\\AI\\MoE-Study-Applied\\model\\base",
+    "device": "cuda",
+    "lm_eval_version": "0.4.13",
+    "limit": null,
+    "n_shot": {
+        "arc_easy": 0,
+        "piqa": 0,
+        "wikitext": 0,
+        "lambada_openai": 0,
+        "winogrande": 5,
+        "hellaswag": 5,
+        "arc_challenge": 15
+    },
+    "results": {
+        "arc_easy": {
+            "name": "arc_easy",
+            "alias": "arc_easy",
+            "sample_len": 2376,
+            "acc,none": 0.3787878787878788,
+            "acc_stderr,none": 0.009953737656542215,
+            "acc_norm,none": 0.3543771043771044,
+            "acc_norm_stderr,none": 0.009815004030251541
+        },
+        "piqa": {
+            "name": "piqa",
+            "alias": "piqa",
+            "sample_len": 1838,
+            "acc,none": 0.6267682263329706,
+            "acc_stderr,none": 0.011284653078254844,
+            "acc_norm,none": 0.6235038084874864,
+            "acc_norm_stderr,none": 0.011304341550126641
+        },
+        "wikitext": {
+            "name": "wikitext",
+            "alias": "wikitext",
+            "sample_len": 62,
+            "word_perplexity,none": 75.20348439117505,
+            "word_perplexity_stderr,none": "N/A",
+            "byte_perplexity,none": 2.243189058341506,
+            "byte_perplexity_stderr,none": "N/A",
+            "bits_per_byte,none": 1.1655512174092182,
+            "bits_per_byte_stderr,none": "N/A"
+        },
+        "lambada_openai": {
+            "name": "lambada_openai",
+            "alias": "lambada_openai",
+            "sample_len": 5153,
+            "perplexity,none": 201.26551930221598,
+            "perplexity_stderr,none": 8.950685978603053,
+            "acc,none": 0.1901804773918106,
+            "acc_stderr,none": 0.005467504643665181
+        },
+        "winogrande": {
+            "name": "winogrande",
+            "alias": "winogrande",
+            "sample_len": 1267,
+            "acc,none": 0.5122336227308603,
+            "acc_stderr,none": 0.014048278820405729
+        },
+        "hellaswag": {
+            "name": "hellaswag",
+            "alias": "hellaswag",
+            "sample_len": 10042,
+            "acc,none": 0.2795259908384784,
+            "acc_stderr,none": 0.004478491697891533,
+            "acc_norm,none": 0.2921728739294961,
+            "acc_norm_stderr,none": 0.004538319464112052
+        },
+        "arc_challenge": {
+            "name": "arc_challenge",
+            "alias": "arc_challenge",
+            "sample_len": 1172,
+            "acc,none": 0.17832764505119453,
+            "acc_stderr,none": 0.011186139406711277,
+            "acc_norm,none": 0.22781569965870307,
+            "acc_norm_stderr,none": 0.012256708602326964
+        }
+    }
+}
