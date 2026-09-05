@@ -7,7 +7,7 @@ import numpy as np
 
 import json
 
-from sympy.printing.pretty.pretty_symbology import line_width
+
 
 # Hyperparameters
 ROOT = Path.cwd()
