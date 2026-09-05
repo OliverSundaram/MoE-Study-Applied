@@ -33,14 +33,14 @@ PRINT_TEXT = True
 
 
 # Functions
-def get_random_prompt(DATA_DIR, SEED, SPLIT, tokenizer, context_length, MAX_NEW_TOKENS):
+def get_random_prompt(DATA_DIR, SEED, SPLIT, tokenizer, context_length, max_new_tokens):
     ds = iter(load_dataset(DATA_DIR, split=SPLIT).shuffle(SEED))
 
     while True:
         prompt = next(ds)["document"]
         formatted_prompt = "<|user|>" + prompt + "<|end|>" + "<|assistant|>"
         ids = tokenizer(formatted_prompt).input_ids
-        if len(ids) <= context_length - MAX_NEW_TOKENS:
+        if len(ids) <= context_length - max_new_tokens:
             break
 
     return prompt
@@ -79,7 +79,7 @@ def main():
             "tok_per_sec": tok_per_sec,
             "time_to_first_tok": time_to_first_tok
         },
-        OUT_DIR / f"{MODEL}_model_{"" if USE_CACHED else "no"}_cached.pt"
+        OUT_DIR / f"{MODEL}_model{"" if USE_CACHED else "_no"}_cached.pt"
     )
 
 
