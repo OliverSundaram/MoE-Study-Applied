@@ -11,6 +11,38 @@
 
 ---
 
+## Table of contents
+
+ - [TL;DR](#tldr)
+ - [Overview](#overview)
+ - [Results](#results)
+   - [The behavioural change](#the-behavioural-change)
+   - [Loss](#loss)
+   - [Benchmarks](#benchmarks)
+   - [Speed](#speed)
+   - [Where it actually stands](#where-it-actually-stands)
+  - [How it was built](#how-it-was-built)
+    - [Teaching a base model to stop](#teaching-a-base-model-to-stop)
+    - [The KV cache](#the-kv-cache)
+   - [Using it](#using-it)
+   - [Running it yourself](#running-it-yourself)
+   - [Repository structure](#repository-structure)
+   - [Citation](#citation)
+   - [References](#references)
+   - [License](#license)
+
+---
+
+## TL;DR
+
+> SFT (Supervised Fine-tuning) a pretrained model specialized it,
+> improving its performance at the specific task — in this case, summarizing BBC articles.
+
+> If you fine-tune a pretrained model without freezing weights, you get a model that specialized
+> too well — it performs excellently at the selected task and worse on general language benchmarks.
+
+---
+
 ## Overview
 
 A supervised fine-tune of the 201M-parameter sparse Mixture-of-Experts model from
@@ -75,7 +107,7 @@ checkpoints, so the effect of fine-tuning is the only variable.
 
 ---
 
-# Results
+## Results
 
 |                                          | base                 | sft                       |
 |------------------------------------------|----------------------|---------------------------|
@@ -84,7 +116,7 @@ checkpoints, so the effect of fine-tuning is the only variable.
 
 At first glance the fine-tune specialized the model at no cost. The following sections are about what it actually cost.
 
-## The behavioural change
+### The behavioural change
 
 Both checkpoints, one BBC article each, up to 500 tokens, `top_k=50`, `temp=0.8`.
 
@@ -119,7 +151,7 @@ and Blackpool appears nowhere in the article.
 
 **The shape was learned completely. The grounding was not learned at all.**
 
-## Loss
+### Loss
 
 |      | Train  | Val    | Test   |
 |------|--------|--------|--------|
@@ -134,7 +166,7 @@ The fine-tune tightened to 1.008, so specializing on one
 narrow task did not collapse the model onto a narrow subset
 of its experts.
 
-## Benchmarks
+### Benchmarks
 
 Seven tasks, lm-evaluation-harness v0.4.13, full splits, batch size 8.
 Few-shot counts are inherited from Remastered.
@@ -192,7 +224,7 @@ winogrande 1,267, hellaswag 10,042, arc_challenge 1,172.
 
 </details>
 
-## Speed
+### Speed
 
 ![KV cache vs no cache](evaluation/assets/speed.png)
 
@@ -200,7 +232,7 @@ Time-to-first-token is flat within each model, as it should be: the first token 
 forward pass over the prompt either way, so there is nothing yet to reuse. The gap between the
 two rows is prompt length rather than caching, since each run drew its own random document.
 
-## Where it actually stands
+### Where it actually stands
 
 **It reliably produces well-formed summaries.** One sentence, newswire register, correct
 length, terminated by the model itself. A capability the base model did not have in any form.
@@ -225,9 +257,9 @@ forgetting against. No summarization-specific metric, the most obvious gap. No R
 
 ---
 
-# How it was built
+## How it was built
 
-## Teaching a base model to stop
+### Teaching a base model to stop
 
 **Vocabulary surgery.** The base tokenizer is Remastered's 32,768-entry BPE, trained for raw
 text and with no notion of turn-taking. `edit_tokenizer.ipynb` loads it from `model/base/`,
@@ -273,7 +305,7 @@ The learning rate is an order of magnitude below the 6e-4 used for pretraining, 
 SFT posture. As the results show, 5e-5 across every parameter for a full epoch still moves the
 model a long way from where it started.
 
-## The KV cache
+### The KV cache
 
 Remastered's README lists "No KV cache" under Limitations, and it costs that study a 6.1x
 speed gap against its baseline. This study implements a properly designed KV cache within
@@ -282,7 +314,7 @@ the base and sft models.
 
 ---
 
-# Using it
+## Using it
 
 Weights and tokenizer: **[huggingface.co/OliverSundaram/MoE-Study-Applied](https://huggingface.co/OliverSundaram/MoE-Study-Applied)**
 
@@ -349,7 +381,7 @@ architecture loads from the `modules.py` shipped inside the checkpoint.
 
 ---
 
-# Running it yourself
+## Running it yourself
 
 **Requirements.** An NVIDIA GPU. There is no CPU path for training, and `sft_training.py`
 raises `RuntimeError` if CUDA is unavailable. This run used an RTX 4060 8GB and took 6.07h at
@@ -393,27 +425,6 @@ python plot_losses.py
 python plot_eval.py
 python plot_speed.py
 ```
-
-**The one thing that will trip you up:** every script resolves its paths from `Path.cwd()`, so
-each runs from *its own directory*, never from the repository root. `sft_training.py`
-additionally imports `training.trainer` and `preparation.dataset`, so the root has to be on
-`PYTHONPATH`, hence step 3 setting it to `..` from inside `training/`.
-
-A few smaller notes:
-
-- Step 1 edits `model/base/` in place, and has to run before step 2. Every downstream script
-  loads its tokenizer from a checkpoint directory, so a freshly downloaded base checkpoint that
-  has not been through step 1 will tokenize `<|user|>` and its siblings as ordinary text and
-  produce the wrong ids.
-- Hyperparameters all live at the top of `training/sft_training.py` under the
-  `# Hyperparameters` banner. Checkpoints land in `runs/sft/`, and `runs/sft/final/` needs
-  copying to `model/sft/` before evaluating.
-- `run_eval.py`, `benchmark_speed.py` and `plot_losses.py` each pick their checkpoint with a
-  `MODEL` or `MODEL_NAME` constant at the top of the file. `plot_eval.py` and `plot_speed.py`
-  read both models at once and need every result file present.
-- XSum downloads from the Hub, so run `hf auth login` if you hit rate limits.
-- `model/`, `runs/` and `preparation/data/` are git-ignored, so no weights and nothing this
-  pipeline generates is ever committed.
 
 ---
 
