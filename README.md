@@ -6,8 +6,7 @@
 ![Transformers](https://img.shields.io/badge/Transformers-5.16.1-orange.svg?style=flat-square)
 [![Model on HF](https://img.shields.io/badge/Model-MoE--Study--Applied-purple?logo=huggingface&style=flat-square)](https://huggingface.co/OliverSundaram/MoE-Study-Applied)
 [![Github Repo](https://img.shields.io/badge/Github-MoE--Study-brightgreen?logo=github&style=flat-square)](https://github.com/OliverSundaram/MoE-Study)
-[![Github Repo](https://img.shields.io/badge/Github-MoE--Study--Remastered-white?logo=github&style=flat-square)](https://github.com/OliverSundaram/MoE-Study-Remastered)
-![Email](https://img.shields.io/badge/Email-OliverSundaram2009@gmail.com-darkred?logo=gmail&style=flat-square)
+[![Github Repo](https://img.shields.io/badge/Github-MoE--Study--Remastered-darkblue?logo=github&style=flat-square)](https://github.com/OliverSundaram/MoE-Study-Remastered)
 
 ---
 
